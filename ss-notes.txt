@@ -1,0 +1,32 @@
+services running on VMs
+
+exploit services on other teams machine to get the flag from them
+
+patch your own services to prevent other's getting your flag.
+
+automate tools to exploit services on all teams.
+
+Flag is valid only for each tick (certain time limit).
+
+Submit the acquired flag to the team interface.
+
+To automate exploit:
+	pwntools
+
+Monitoring tools :
+	Tcpdump, wireshark
+
+Prepare scripts for the project.
+
+
+t.get_serice_list()
+
+Get list of teams' IP addresses, and the flag id for the flag you must steal:
+targets = t.get_targets(<service ID>)
+
+Submit flags:
+	t.submit_flag(["FLGxxxx", "FLGyyy", "FLGzzz"])
+
+34.223.215.204
+
+1338
