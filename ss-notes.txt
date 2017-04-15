@@ -1,3 +1,60 @@
+How to attack if you're team 1:
+
+Step 1: Get the ictf interface as follows:
+	
+	i = iCTF("http://52.34.158.221/")
+	t = i.login("team1@example.com","password")
+
+Step 2: Get the list of services
+	
+	t.get_service_list()
+
+[{u'authors': u'UCSB',
+  u'description': u'Password-protected note storage service in C.',
+  u'flag_id_description': u'Flags are identified by the note name.',
+  u'port': 20001,
+  u'service_id': 10001,
+  u'service_name': u'sample_c',
+  u'state': u'enabled',
+  u'team_id': 0,
+  u'upload_id': 1},
+ {u'authors': u'The iCTF team 2016',
+  u'description': u'Password-protected note storage service in Python.',
+  u'flag_id_description': u'Flags are identified by the note name.',
+  u'port': 20002,
+  u'service_id': 10002,
+  u'service_name': u'sample_py',
+  u'state': u'enabled',
+  u'team_id': 0,
+  u'upload_id': 2},
+ {u'authors': u'UCSB',
+  u'description': u'Password-protected note storage service for the web.',
+  u'flag_id_description': u'Flags are identified by the note name.',
+  u'port': 20003,
+  u'service_id': 10003,
+  u'service_name': u'sample_web',
+  u'state': u'enabled',
+  u'team_id': 0,
+  u'upload_id': 3}]
+
+
+Step 3: Get the target for a service.
+
+	t.get_targets('sample_py')
+
+	{u'targets': [{u'flag_id': u'2604531195',
+	   u'hostname': u'team2',
+	   u'port': 20002,
+	   u'team_name': u'team_name_2'}]}
+
+
+Step 4: Use netcat to access the service
+
+	nc team2 20002
+  
+******************************************
+
+
 services running on VMs
 
 exploit services on other teams machine to get the flag from them
@@ -26,7 +83,3 @@ targets = t.get_targets(<service ID>)
 
 Submit flags:
 	t.submit_flag(["FLGxxxx", "FLGyyy", "FLGzzz"])
-
-34.223.215.204
-
-1338

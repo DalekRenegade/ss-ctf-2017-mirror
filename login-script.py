@@ -4,12 +4,19 @@ from ictf import iCTF
 import os
 from sys import argv
 
-script,user = argv
+argc = len(argv)
+if argc > 2:
+	user = argv[1] or "ctf"
+	team = argv[2] or "team1"
+elif argc > 1: 
+	user = argv[1] or "ctf"
+else:
+	user = "ctf"
+	team = "team1"
 
 # i=iCTF("http://35.161.233.76/")
 i=iCTF("http://52.34.158.221/")
-
-t=i.login("team1@example.com","password")
+t=i.login("{0}@example.com".format(team),"password")
 
 key_info = t.get_ssh_keys()
 
