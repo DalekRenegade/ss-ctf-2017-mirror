@@ -1,0 +1,10 @@
+
+- hosts: ctfserver
+  remote_user: root
+  tasks:
+  - name: create poop
+    command: touch poop.txt gormint.txt
+  - name: install git
+    aptget:
+      name: git
+      state: latest

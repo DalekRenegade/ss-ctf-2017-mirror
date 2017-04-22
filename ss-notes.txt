@@ -1,6 +1,7 @@
 How to attack if you're team 1:
 
 Step 1: Get the ictf interface as follows:
+  from ictf import iCTF
 	
 	i = iCTF("http://52.34.158.221/")
 	t = i.login("team1@example.com","password")
