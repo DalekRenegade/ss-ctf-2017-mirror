@@ -1,0 +1,84 @@
+Common Binary Vulnerabilities
+
+a. Dot - Dot Attacks -> 
+	
+	Identification -> If we get a dot-dot in any filepath. or if file is given as input
+	
+	patch -> Remove any dot-dot (..) in any filepath.
+(Namrata)
+
+
+b. Home Attacks -> 
+	
+	Identification -> If we get TILDA(~) in any filepath or if file is given as input with (~)
+	
+	attack -> export HOME=<new home path>	
+	
+	patch -> Remove Tilda(~)
+(Namrata)
+
+c. Path Attacks -> 
+
+d. Link Attacks -> 
+
+	Identification -> All the filenames used in the code should be files itself. 
+	
+	attack -> ln -sf <destination file path> <sym-link path>
+	
+	patch ->
+	(Namrata)
+
+e. Buffer Overflows ->
+
+	Identification -> Saved eip and Saved ebp can be overflown to run Byte Code to break the service.
+	
+	Get Shell Code -> snoob --from-asm <your asm file> --to-bin shell.bin
+	(Your shell code is in shell.bin)
+	
+	Common gdb Commands
+	-------------------
+	1. x/x - shows hex 
+	2. run/r - run the program
+	3. c - continue
+	4. b (line/function-name)- break point at line
+	5. info registers - information of all the registers
+	6. show env - information of all environment variables
+	7. info address <symbol/variable> - address where symbol variable is stored
+	8. set follow-fork-mode child - follow child
+	
+	Functions to be looked for -> for, while, strcpy(), array buffer size, gets(), strcat (), sprintf (), vsprintf ()
+	
+	patch -> 
+	
+
+f. Integer Overflows ->
+
+	Identification -> check for loops, signed integers are suspectible
+	
+	maximum values of integers
+	--------------------------
+	short - 32767
+	int - 2147483647
+	long - 2147483647
+	char - 127
+	
+	patch ->
+	
+	
+g Format String Vulnerability ->
+
+	Identification -> check for the following functions ->  printf() ,fprintf(), sprintf(), snprintf(), %x, %s, %n, %d, %u, %c, %f.
+	
+	Check if argv is in 1st argument of the above functions.
+	
+	patch ->
+	
+	
+	
+	
+	
+	
+	
+
+
+Common Web Vulnerabilities
