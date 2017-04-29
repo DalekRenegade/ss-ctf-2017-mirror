@@ -1,31 +1,22 @@
-- hosts: ctfserver
+- hosts: finalctf
   remote_user: root
   tasks:
-  - name: create poop
-    command: touch poop-gormint.txt
-  - name: Install Git
-    apt:
-      name: git
-      state: present
-  - name: Git ctf-code
-    git:
-      repo: https://github.com/vishnun/ss-ctf-2017.git
-      dest: ~/p00p/
-      accept_hostkey: yes
-      force: yes
-  - name: Git shellnoob
-    git:
-      repo: https://github.com/reyammer/shellnoob.git
-      dest: ~/noob/
-      accept_hostkey: yes
-      force: yes
-  - name: install pexpect
-    pip:
-      name: pexpect
-      version: 3.3
-  - name: install shellnoob
-    shell: yes '' | /root/noob/shellnoob.py --install
-  - name: install pwntools
-    pip:
-      name: pwntools
-
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+    - name: Git shellnoob
+      git:
+        repo: https://github.com/reyammer/shellnoob.git
+        dest: ~/noob/
+        accept_hostkey: yes
+        force: yes
+    - name: install pexpect
+      pip:
+        name: pexpect
+        version: 3.3
+    - name: install shellnoob
+      shell: yes '' | /root/noob/shellnoob.py --install
+    - name: install pwntools
+      pip:
+        name: pwntools

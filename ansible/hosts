@@ -45,4 +45,4 @@
 # Hosts for the team setup for CTF.
 
 [ctfserver]
-34.223.241.147 ansible_user=root ansible_port=1337 ansible_ssh_private_key_file=/home/vishnunarang/Documents/project/ss-ctf-2017/root_key
+35.167.152.77 ansible_user=root ansible_port=1345 ansible_ssh_private_key_file=/home/vishnunarang/Documents/project/ss-ctf-2017/Finals/root_key

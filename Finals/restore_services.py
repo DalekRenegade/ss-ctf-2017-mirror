@@ -10,6 +10,6 @@ argc = len(argv)
 services = argv[1:] or ["sample_c", "sample_py", "sample_web"]
 
 for service in services:
-	cmd = "mkdir -p {0}; scp -r -P 1345 -i root_key ./{0} root@52.89.52.99:temp/{0}".format(service)
+	cmd = "mkdir -p {0}; scp -r -P 1345 -i root_key ../{0} root@52.89.52.99:temp/{0}".format(service)
 	os.system(cmd)
 
