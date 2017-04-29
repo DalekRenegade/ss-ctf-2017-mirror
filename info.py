@@ -1,19 +1,25 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-from ictf import iCTF
 import os
+from ictf import iCTF
 from sys import argv
-
-print "This is for Team 1:\n"
 
 argc = len(argv)
 
-i=iCTF("http://52.34.158.221/")
-t=i.login("team1@example.com","password")
+with open("secret.txt", 'r') as f:
+	username = f.readline().strip()
+	passwd = f.readline().strip()
 
-if argc == 1:
-	option = input("Enter one of these: \n1: services\n2: targets\n")
+if username == "":
+	print "You forgot to copy credentials from the email..."
+	print "Create a file named 'secret.txt' in the finals directory and put first line as username and second line as passwd."
+	exit(0)
+
+i = iCTF("http://35.167.152.77/")
+t = i.login(username,passwd)
+
+option = input("Enter one of these: \n1: services\n2: targets\n")
 
 if option == 1:
 	services = t.get_service_list();
