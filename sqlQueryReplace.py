@@ -8,12 +8,18 @@ def findVariableValue(code,myQuery):
             return myQuery
 
 def writeToFile(outputcode,code,fd):
+    tempCode =[]
+    replaced = False
     for line in code:
-        if "mysql_query" in line and re.sub('mysql_query[ (]', '', line, re.IGNORECASE):
+        if "mysql_query" in line and re.sub('mysql_query[ (]', '', line, re.IGNORECASE) and not replaced :
             for queryLine in outputcode:
                 fd.write(queryLine)
+                tempCode.append(queryLine)
+                replaced = True
         else:
             fd.write(line)
+            tempCode.append(line)
+    return tempCode
 
 
 def cleanQuery(myQuery):
@@ -30,7 +36,7 @@ def cleanQuery(myQuery):
     return myQuery
 
 
-def findQuery(line,code,filePath):
+def findQuery(line,code,filePath,lineIdx):
     parts = line.split("mysql_query")
     myQuery = parts[1].lstrip()
     myQuery =myQuery[myQuery.find("(")+1:myQuery.find(")")].lstrip()
@@ -38,6 +44,10 @@ def findQuery(line,code,filePath):
         myQuery =myQuery.split(",")[0]
         myQuery = findVariableValue(code,myQuery).split(";")[0]
         myQuery=cleanQuery(myQuery)
+    #logFilePath = os.path.join()
+    logFile = open('SQL-Poops.log','a')
+    logFile.write("+"+str(lineIdx)+ " " + filePath + "\n" +myQuery +"\n\n")
+    logFile.close()
     os.system("php -f ~/getReplaceStringSQL.php "+ myQuery +" > ~/outputfile.txt")
     found = False
     for root, dir, files in os.walk("/home"):
@@ -46,7 +56,7 @@ def findQuery(line,code,filePath):
                 outputfile = open(os.path.join(root, output), 'r')
                 outputcode = outputfile.readlines()
                 fd = open(filePath, 'w')
-                writeToFile(outputcode,code,fd)
+                code = writeToFile(outputcode,code,fd)
                 outputfile.close()
                 os.system("rm ~/outputfile.txt")
                 fd.close()
@@ -54,21 +64,24 @@ def findQuery(line,code,filePath):
                 break
         if found:
             break
+    return code
 
 
 
 for root,dir,files in os.walk("/home"):
     for file in files:
         if file.endswith(".php") and file is not "getReplaceStringSQL.php":
+            lineIdx=0
             myFile=file
             file=open(os.path.join(root, file),'r')
             code =file.readlines()
             for  line in code:
+                lineIdx+=1
                 if "mysql_query" in line and re.sub('mysql_query[ (]','',line,re.IGNORECASE):
-                    findQuery(line,code,os.path.join(root, myFile))
-                    #print "Hi"
-                    break
+                    code = findQuery(line,code,os.path.join(root, myFile),lineIdx)
+                    print "Hi"
             file.close()
+
 
 
 
