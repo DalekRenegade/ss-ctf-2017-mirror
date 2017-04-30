@@ -5,6 +5,15 @@
       apt:
         name: git
         state: present
+    - name: HTML Purifier
+      unarchive:
+        src: http://htmlpurifier.org/releases/htmlpurifier-4.9.2.zip
+        dest: ~/
+        remote_src: True
+    - name: HtmlPurifier permissions
+      shell: chmod -R 0755 HTMLPurifier/DefinitionCache/Serializer
+      args:
+        chdir: ~/htmlpurifier-4.9.2/library
     - name: Git shellnoob
       git:
         repo: https://github.com/reyammer/shellnoob.git
@@ -20,9 +29,27 @@
     - name: install pwntools
       pip:
         name: pwntools
-    - name: secure cookie
-      shell: sed -i 's/;session.cookie_secure =/session.cookie_secure = True/g' /etc/php5/cli/php.ini
+    - name: Secure cookie.
+      lineinfile:
+        path: /etc/php5/cli/php.ini
+        state: present
+        regexp: '^;session.cookie_secure ='
+        line: 'session.cookie_secure = True'
+    # - name: secure cookie
+      # shell: sed -i 's/;session.cookie_secure =/session.cookie_secure = True/g' /etc/php5/cli/php.ini
     - name: install CLI browser
       apt:
         name: lynx
         state: present
+    - name: Install xclip
+      apt:
+        name: xclip
+        state: present
+    - name: Slap!!
+      shell: curl -sL https://raw.githubusercontent.com/slap-editor/slap/master/install.sh | sh
+    - name: Execute local action...
+      local_action: shell python update-code.py
+    - name: execute csanitizer_helper from code directory on remote.
+      shell: ~/code/csanitizer_helper.sh
+      args:
+        chdir: code/

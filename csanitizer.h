@@ -9,7 +9,7 @@ int checkIfBlockIsByteCode(char *ptr)
 	return 0;
 }
 
-char* sanitizeShellCode(char *arg)
+char* sanitizeShellCode(char *arg, int shouldFreeArg)
 {
 	int len = strlen(arg);
 	char *newarg = (char*)calloc(len+1, sizeof(char));
@@ -17,15 +17,17 @@ char* sanitizeShellCode(char *arg)
 	int i=0, j=0;
 	while(i<len)
 	{
-		if(checkIfBlockIsByteCode(&(arg[i])))
+		if(checkIfBlockIsByteCode(&(arg[i])) == 1)
 			i+=4;
 		else
 			newarg[j++] = arg[i++];
 	}
+	if(shouldFreeArg == 1)
+		free(arg);
 	return newarg;
 }
 
-char* sanitizePathVulnerability(char *arg)
+char* sanitizePathVulnerability(char *arg, int shouldFreeArg)
 {
 	int len = strlen(arg);
 	char *newarg = (char*)calloc(len+1, sizeof(char));
@@ -33,26 +35,34 @@ char* sanitizePathVulnerability(char *arg)
 	int i=0, j=0;
 	while(i<len)
 	{
-		if(arg[i] == '.' && arg[i+1] == '.')
+		if((arg[i] == '.' && arg[i+1] == '.') || (arg[i] == '%' && arg[i+1] == 'n'))
 			i+=2;
+		else if(arg[i] == '%' && arg[i+1] == 'h' && arg[i+2] == 'h' && arg[i+3] == 'n')
+			i+=4;
 		else
 			newarg[j++] = arg[i++];
 	}
 	if(newarg[0] == '~')
 		newarg[0] = '/';
-	free(arg);
+	if(shouldFreeArg == 1)
+		free(arg);
 	return newarg;
 }
 
-char* sanitizeCommandInjection(char *arg)
+char* sanitizeCommandInjection(char *arg, int shouldFreeArg)
 {
-	int len=0, flag=0, maxColumns = 20;
-	
-	while(arg[len] != ';' || arg[len] != '&' || arg[len++] != '|');
-	
-	char *newarg = (char*)calloc(len+1, sizeof(char));
-	memset(newarg, 0, len+1);
-	
+	int len = 0, flag = 0, maxColumns = 50;
+	while(len<strlen(arg))
+	{
+		if(arg[len] == ';' || arg[len] == '&' || arg[len] == '|')
+			break;
+		len++;
+	}
+	char *newarg = (char*)calloc(len + 1, sizeof(char));
+	memset(newarg, 0, len + 1);
+	arg[len] = '\0';
+	if(len < strlen(arg))
+		free(&(arg[len+1]));
 	FILE *fp = fopen("/var/restricted_cmd.txt", "r");
 	if (fp > 0)
 	{
@@ -60,8 +70,8 @@ char* sanitizeCommandInjection(char *arg)
 		while (fgets(command, sizeof(command), fp))
 		{
 			command[strlen(command) - 1] = '\0';
-			char *p = strstr(argv[i], command);
-			if(p == argv[i] || (p != NULL && p[-1] == ' '))
+			char *p = strstr(arg, command);
+			if(p == arg || (p != NULL && (p[-1] == ' ' || p[-1] == '/')))
 			{
 				flag = 1;
 				break;
@@ -69,36 +79,49 @@ char* sanitizeCommandInjection(char *arg)
 		}
 		if(flag == 0)
 			strncpy(newarg, arg, len);
-		else
-			newarg[0] = '';
 	}
 	fclose(fp);
-	free(arg);
+	if(shouldFreeArg == 1)
+		free(arg);
 	return newarg;
 }
 
 char** init(int argc, char *argv[])
 {
+	int len = strlen(argv[0]);
 	char **newargv = (char**)calloc(argc, sizeof(char*));
-	for(int i=0;i<argc;i++)
+	newargv[0] = (char*)calloc(len + 1, sizeof(char));
+	memset(newargv[0], 0, len+1);
+	strncpy(newargv[0], argv[0], len);
+	for(int i=1;i<argc;i++)
 	{
-		int len = strlen(argv[i]);
-		char *newarg = sanitizeShellCode(argv[i]);
-		newargv[i] = sanitizePathVulnerability(newarg);
+		len = strlen(argv[i]);
+		char *newarg = sanitizeShellCode(argv[i], 0);
+		newargv[i] = sanitizePathVulnerability(newarg, 1);
 	}
 	return newargv;
 }
 
 char** init2(int argc, char *argv[])
 {
+	int len = strlen(argv[0]);
 	char **newargv = (char**)calloc(argc, sizeof(char*));
-	for(int i=0;i<argc;i++)
+	newargv[0] = (char*)calloc(len + 1, sizeof(char));
+	memset(newargv[0], 0, len+1);
+	strncpy(newargv[0], argv[0], len);
+	for(int i=1;i<argc;i++)
 	{
-		int len = strlen(argv[i]);
-		char *newarg = sanitizeShellCode(argv[i]);
-		newarg = sanitizePathVulnerability(newarg);
-		newargv[i] = sanitizeCommandInjection(newarg);
+		len = strlen(argv[i]);
+		char *newarg = sanitizeShellCode(argv[i], 0);
+		newarg = sanitizePathVulnerability(newarg, 1);
+		newargv[i] = sanitizeCommandInjection(newarg, 1);
 	}
 	return newargv;
 }
 
+void freeMemory(int argc, char **argv)
+{
+	for(int i=0;i<argc;i++)
+		free(argv[i]);
+	free(argv);
+}

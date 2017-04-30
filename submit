@@ -1,0 +1,26 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
+
+import pprint
+
+from ictf import iCTF
+from sys import argv
+
+pp = pprint.PrettyPrinter(indent=4)
+flags = argv[1:]
+
+with open("secret.txt", 'r') as f:
+	username = f.readline().strip()
+	passwd = f.readline().strip()
+
+i=iCTF("http://35.167.152.77/")
+
+t = i.login(username,passwd)
+
+if len(flags) == 0:
+	print "Give some space separated flags to submit. Here's the remaining tic time.."
+	pp.pprint(t.get_tick_info())
+	exit(0)
+
+
+t.submit_flag(flags)
