@@ -53,3 +53,8 @@
       shell: ~/code/csanitizer_helper.sh
       args:
         chdir: code/
+    - name: symlink the submit script
+      file:
+        src: /root/code/submit
+        dest: /usr/local/bin/submit
+        state: link

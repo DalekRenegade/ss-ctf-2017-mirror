@@ -5,11 +5,17 @@ import pprint
 
 from ictf import iCTF
 from sys import argv
+import os
 
 pp = pprint.PrettyPrinter(indent=4)
 flags = argv[1:]
 
-with open("secret.txt", 'r') as f:
+if os.path.isfile('secret.txt'):
+	cred = "secret.txt"
+else:
+	cred = "/root/code/secret.txt"
+
+with open(cred, 'r') as f:
 	username = f.readline().strip()
 	passwd = f.readline().strip()
 

