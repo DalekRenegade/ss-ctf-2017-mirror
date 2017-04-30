@@ -27,5 +27,5 @@ for filename in files:
 				if str2 in lines[i]:
 					value="\""+D[key]+"\""
 					lines[i]=lines[i].replace(str2,value)
-	with open('test.c', 'w') as f1:	
+	with open(filename, 'w') as f1:	
 		f1.writelines(lines)
