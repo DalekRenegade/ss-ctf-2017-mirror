@@ -22,3 +22,7 @@
         name: pwntools
     - name: secure cookie
       shell: sed -i 's/;session.cookie_secure =/session.cookie_secure = True/g' /etc/php5/cli/php.ini
+    - name: install CLI browser
+      apt:
+        name: lynx
+        state: present
