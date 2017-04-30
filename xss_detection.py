@@ -8,8 +8,9 @@ def xss_check(match):
     # print "testInput(" + match + ")"
     return "testInput(" + match + ")"
 
+purifier_path = "/root/htmlpurifier-4.9.2/library/HTMLPurifier.auto.php"
 
-html_purifier_header = "\nrequire_once '%s';\n header('X-XSS-Protection: 0');\n\n" % argv[1]
+html_purifier_header = "\nrequire_once '%s';\n header('X-XSS-Protection: 0');\n\n" % purifier_path
 
 html_purifier_func = "function testInput($data){\n" \
 	   "$purifier = new HTMLPurifier();\n" \
@@ -18,7 +19,7 @@ html_purifier_func = "function testInput($data){\n" \
 	   "return $data1;\n" \
 	"}\n"
 
-directory = argv[2] if len(argv) > 2 else os.getcwd()
+directory = argv[1] if len(argv) > 1 else os.getcwd()
 
 with open("xss-poops.log", "a+") as log_file:
 
