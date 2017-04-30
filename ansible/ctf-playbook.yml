@@ -5,6 +5,15 @@
       apt:
         name: git
         state: present
+    - name: HTML Purifier
+      unarchive:
+        src: http://htmlpurifier.org/releases/htmlpurifier-4.9.2.zip
+        dest: ~/
+        remote_src: True
+    - name: HtmlPurifier permissions
+      shell: chmod -R 0755 HTMLPurifier/DefinitionCache/Serializer
+      args:
+        chdir: ~/htmlpurifier-4.9.2/library
     - name: Git shellnoob
       git:
         repo: https://github.com/reyammer/shellnoob.git
