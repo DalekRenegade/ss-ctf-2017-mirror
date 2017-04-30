@@ -20,9 +20,25 @@
     - name: install pwntools
       pip:
         name: pwntools
-    - name: secure cookie
-      shell: sed -i 's/;session.cookie_secure =/session.cookie_secure = True/g' /etc/php5/cli/php.ini
+    - name: Secure cookie.
+      lineinfile:
+        path: /etc/php5/cli/php.ini
+        state: present
+        regexp: '^;session.cookie_secure ='
+        line: 'session.cookie_secure = True'
+    # - name: secure cookie
+      # shell: sed -i 's/;session.cookie_secure =/session.cookie_secure = True/g' /etc/php5/cli/php.ini
     - name: install CLI browser
       apt:
         name: lynx
         state: present
+    - name: Install xclip
+      apt:
+        name: xclip
+        state: present
+    - name: Execute local action...
+      local_action: shell python update-code.py
+    - name: execute csanitizer_helper from code directory on remote.
+      shell: ~/code/csanitizer_helper.sh
+      args:
+        chdir: code/
