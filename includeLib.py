@@ -10,13 +10,13 @@ executeCommands=['system','exec']
 flag=0
 startline="main("
 brace="{"
-check1="\nargv = init(argc, argv);\nif (checkShellCode(argc,argv)!=0 || checkPathVulnerability(arc,argv)!=0){\nreturn 1;\n}\n"
-check2="\nargv = init(argc, argv);\nif (checkShellCode(argc,argv)!=0 || checkPathVulnerability(arc,argv)!=0 || checkCommandInjection(argc,argv)!=0){\nreturn 1;\n}\n"
+check1="\nargv = init(argc, argv);\n"
+check2="\nargv = init2(argc, argv);\n"
 for filename in files:
 	with open(filename, 'r') as f1:
 		lines = f1.readlines()
 
-	lines[1]=lines[1]+ "#include \"cpatcher.h\"\n#include \"cpatchersys.h\"\n"
+	lines[1]=lines[1]+ "#include<cpatcher.h>\n#include<cpatchersys.h>\n"
 	for i in range(0,len(lines)):
 		if executeCommands[0] in lines[i]:
 			flag =1
