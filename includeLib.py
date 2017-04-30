@@ -16,7 +16,7 @@ for filename in files:
 	with open(filename, 'r') as f1:
 		lines = f1.readlines()
 
-	lines[1]=lines[1]+ "#include<cpatcher.h>\n#include<cpatchersys.h>\n"
+	lines[1]=lines[1]+ "#include<csanitizer.h>\n"
 	for i in range(0,len(lines)):
 		if executeCommands[0] in lines[i]:
 			flag =1
