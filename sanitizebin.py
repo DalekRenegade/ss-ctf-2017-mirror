@@ -15,7 +15,7 @@ for x in lines:
 i=0
 lines=[]
 for filename in files:
-	with open('test.c', 'r') as f1:	
+	with open(filename, 'r') as f1:	
 		lines = f1.readlines()
 		for i in range(0,len(lines)):
 			for key in D:
