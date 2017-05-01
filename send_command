@@ -5,6 +5,8 @@ from ictf import iCTF
 import os
 import sys
 import httplib
+import commands
+import re
 
 argc = len(sys.argv)
 if argc < 0:
