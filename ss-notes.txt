@@ -1,3 +1,18 @@
+Restart service
+
+sudo service xinetd restart
+
+
+
+
+
+
+
+
+
+
+
+
 How to attack if you're team 1:
 
 Step 1: Get the ictf interface as follows:
