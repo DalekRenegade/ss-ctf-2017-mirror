@@ -1,14 +1,10 @@
 Restart service
 
-sudo service xinetd restart
+service xinetd restart
 
-
-
-
-
-
-
-
+nohup wrapper_c &
+nohup wrapper_web &
+nohup wrapper_py &
 
 
 
