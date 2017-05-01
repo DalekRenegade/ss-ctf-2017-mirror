@@ -8,6 +8,11 @@ nohup wrapper_py &
 
 
 
+to change permissions
+
+
+
+
 
 How to attack if you're team 1:
 
