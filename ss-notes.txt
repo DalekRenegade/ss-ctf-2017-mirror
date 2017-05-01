@@ -1,3 +1,19 @@
+Restart service
+
+service xinetd restart
+
+nohup wrapper_c &
+nohup wrapper_web &
+nohup wrapper_py &
+
+
+
+to change permissions
+
+
+
+
+
 How to attack if you're team 1:
 
 Step 1: Get the ictf interface as follows:
