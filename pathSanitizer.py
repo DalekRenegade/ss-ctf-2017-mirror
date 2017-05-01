@@ -12,7 +12,8 @@ import re
 directory = sys.argv[1]
 os.chdir(argv[1])
 D={}
-pythonLines=[] 
+pythonLines=[]
+pythonLines2=[]
 seaLions=[]
 pythonFiles=[]
 seaFiles=[]
@@ -23,10 +24,27 @@ envVar=os.system("env| grep SESSION>/tmp/environment.txt")
 with open("/tmp/environment.txt", 'r') as f1:
 			envVarList = f1.readlines()
 			print envVarList
+
+"""
+Function to find raw_input string in a line:
+"""
+def find_raw(line):
+		start=line.index('raw_input')
+		end = line.index('\')')+2
+		return line[start:end]
+
+"""
+Function to replace ../
+"""
+dd = "def replacedd(instr):\n\twhile '../' in instr:\n\t\tinstr.replace('../','')\n\treturn instr"
+
+"""Env variables dictionary"""
 for x in envVarList:
 	y=x.index("=")
 	D[x[:y]]=x[y+1:].strip("\n")
 	print x[:y]
+
+
 print ("Finding vulnerabilities in python")
 for dirpath, dirnames, filenames in os.walk(directory):
     for filename in [f for f in filenames if f.endswith(".py")]:
@@ -47,6 +65,26 @@ for filecontent in pythonFiles:
 		
 	with open(filecontent, 'w') as f1:
 		f1.writelines(pythonLines)
+
+"""
+Code to sanitize the raw_input() function in the python files.
+"""
+	with open(filecontent, 'r') as f2:
+		pythonLines2 = f2.readlines()
+		for lineNum,line in enumerate(pythonLines2):
+			if 'raw_input' in line:
+				tempString = find_raw(line)
+				newString = 'replacedd('tempString')'
+				pythonLines2[lineNum]=pythonLines2[lineNum].replace(tempString,newString)
+	
+	with open(filecontent, 'w') as f2:
+		pythonLines2.insert(0,dd)
+		f2.writelines(pythonLines2)
+	
+		
+		
+
+
 print ("Finding vulnerabilities in c")
 for dirpath, dirnames, filenames in os.walk(directory):
     for filename in [f for f in filenames if f.endswith(".c")]:
