@@ -5,7 +5,7 @@
 char** init(int argc, char *argv[])
 {
 	char **newargv = (char**)calloc(argc + 1, sizeof(char*));
-	newargv[0] = (char*)calloc(100, sizeof(char));
+	newargv[0] = (char*)calloc(255, sizeof(char));
 	for(int i=1;i<argc;i++)
 	{
 		int len = strlen(argv[i]);

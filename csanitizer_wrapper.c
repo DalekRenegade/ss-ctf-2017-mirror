@@ -12,16 +12,9 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	extern char **environ;
-	
-	char *dupPath, *fileName;
-	
+	extern char **environ;	
 	char *path = "{0}";
-	
-	dupPath = strdup(path);
-	fileName = basename(dupPath);
-	strcpy(argv[0], fileName);
-	
+	strcpy(argv[0], path);
 	execve(path, argv, environ);
 	
 	return 0;
