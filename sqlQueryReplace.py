@@ -4,7 +4,7 @@ import re
 import sys
 
 codePath = sys.argv[1]
-#logFilePath =sys.argv[2]
+curFilePath ="./"
 
 def findVariableValue(code,myQuery):
     for line in code:
@@ -50,12 +50,12 @@ def findQuery(line,code,filePath,lineIdx):
         myQuery = findVariableValue(code,myQuery).split(";")[0]
         myQuery=cleanQuery(myQuery)
     #logFilePath = os.path.join()
-    logFile = open(os.path.join(codePath, 'SQL-Poops.log'),'a')
+    logFile = open(os.path.join(curFilePath, 'SQL-Poops.log'),'a')
     logFile.write("+"+str(lineIdx)+ " " + filePath + "\n" +myQuery +"\n\n")
     logFile.close()
-    os.system("php -f " +codePath+"getReplaceStringSQL.php "+ myQuery +" > "+codePath+"outputfile.txt")
+    os.system("php -f " +curFilePath+"getReplaceStringSQL.php "+ myQuery +" > "+curFilePath+"outputfile.txt")
     found = False
-    for root, dir, files in os.walk(codePath):
+    for root, dir, files in os.walk(curFilePath):
         for output in files:
             if output =="outputfile.txt":
                 outputfile = open(os.path.join(root, output), 'r')
@@ -63,7 +63,7 @@ def findQuery(line,code,filePath,lineIdx):
                 fd = open(filePath, 'w')
                 code = writeToFile(outputcode,code,fd)
                 outputfile.close()
-                os.system("rm "+codePath+"outputfile.txt")
+                os.system("rm "+curFilePath+"outputfile.txt")
                 fd.close()
                 found=True
                 break
