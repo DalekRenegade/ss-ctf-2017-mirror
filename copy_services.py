@@ -13,6 +13,3 @@ for service in services:
 	cmd = "mkdir -p {0}; scp -r -P 1345 -i ctf_key ctf@52.88.7.244:{0}/ro ./{0}".format(service)
 	os.system(cmd)
 	
-	cmd = "mkdir -p {0}; scp -r -P 1345 -i ctf_key ctf@52.88.7.244:{0}/www ./{0}".format(service)
-	os.system(cmd)
-
