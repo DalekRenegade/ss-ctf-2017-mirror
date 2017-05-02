@@ -16,7 +16,7 @@ if username == "":
 	print "Create a file named 'secret.txt' in the finals directory and put first line as username and second line as passwd."
 	exit(0)
 
-i = iCTF("http://35.167.152.77/")
+i = iCTF("http://35.160.215.67/")
 t = i.login(username,passwd)
 
 option = input("Enter one of these: \n1: services\n2: targets\n")
