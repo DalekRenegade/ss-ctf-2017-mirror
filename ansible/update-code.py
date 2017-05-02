@@ -3,5 +3,5 @@
 
 import os
 
-cmd = "scp -r -P 1345 -i root_key ../. root@52.89.52.99:code"
+cmd = "scp -r -P 1345 -i root_key . root@52.88.7.244:code"
 os.system(cmd)
