@@ -1,6 +1,8 @@
 - hosts: finalctf
   remote_user: root
   tasks:
+    - name: Execute local action...
+      local_action: shell python update-code.py
     - name: Install Git
       apt:
         name: git
@@ -43,16 +45,10 @@
         state: present
     - name: Install xclip
       apt:
-        name: xclip
+        name: xclip 
         state: present
     - name: Slap!!
       shell: curl -sL https://raw.githubusercontent.com/slap-editor/slap/master/install.sh | sh
-    - name: Execute local action...
-      local_action: shell python update-code.py
-    - name: execute csanitizer_helper from code directory on remote.
-      shell: ~/code/csanitizer_helper.sh
-      args:
-        chdir: code/
     - name: symlink the submit script
       file:
         src: /root/code/submit

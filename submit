@@ -19,7 +19,7 @@ with open(cred, 'r') as f:
 	username = f.readline().strip()
 	passwd = f.readline().strip()
 
-i=iCTF("http://35.167.152.77/")
+i=iCTF("http://35.160.215.67/")
 
 t = i.login(username,passwd)
 

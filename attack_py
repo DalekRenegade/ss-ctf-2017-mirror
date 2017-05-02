@@ -17,7 +17,7 @@ service_id = []
 with open("secret.txt", 'r') as f:
     username = f.readline().strip()
     passwd = f.readline().strip()
-i=iCTF("http://35.167.152.77/")
+i=iCTF("http://35.160.215.67/")
 t = i.login(username,passwd)
 
 services = t.get_service_list()
