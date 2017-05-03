@@ -21,7 +21,7 @@ html_purifier_func = "function testInput($data){\n" \
 
 directory = argv[1] if len(argv) > 1 else os.getcwd()
 
-with open("/var/log/xss-poops.log", "a+") as log_file:
+with open("/var/log/xss-logs.log", "a+") as log_file:
 
     for subdir, dirs, files in os.walk(directory):
         for file in files:
