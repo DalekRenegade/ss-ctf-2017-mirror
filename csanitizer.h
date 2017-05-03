@@ -57,6 +57,11 @@ int checkCommandInjection(int argc, char *argv[])
 			flag = 3;
 			break;
 		}
+		else if(strstr(argv[i], "%n") != NULL || strstr(argv[i], "%hhn") != NULL)
+		{
+			flag = 5;
+			break;
+		}
 		else
 		{
 			//Command injecting
